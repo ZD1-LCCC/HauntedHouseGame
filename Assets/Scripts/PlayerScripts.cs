@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CCMove : MonoBehaviour
+public class PlayerScripts : MonoBehaviour
 {
     private CharacterController _cc;   
 
     public GameObject camera;
     public float speed = 10.0f;
-    float gravity = -1f;
+    const float GRAVITY = -5f;
+    float gravity = -5f;
     //float jumpForce = 500.0f;
     public float sensTurn = 5.0f;
+    bool airborne = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,10 @@ public class CCMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (airborne == true && gravity >= -20){
+            gravity += GRAVITY * Time.deltaTime;
+        }
+        
         //turn when mouse left and right
         transform.Rotate(0, Input.GetAxis("Mouse X")*sensTurn, 0);
 
@@ -49,7 +55,7 @@ public class CCMove : MonoBehaviour
         }   
         */
 
-        //asjust for framerate
+        //adjust for framerate
         myDirection = myDirection * Time.deltaTime;
 
         //limit max speed
@@ -62,4 +68,30 @@ public class CCMove : MonoBehaviour
         _cc.Move(myPlayerDirection);
 
     }
+    void OnTriggerEnter(Collider collided)
+    {
+        //outputs collision confirmation into log
+        //Debug.Log("Collision with " + collided.GetComponent<Collider>());
+        if (collided.gameObject.tag == "KeyObject")
+        {
+            //makes object that the player collided with go poof
+            Debug.Log("Collided with Key Object: " + collided.GetComponent<Collider>());
+            collided.gameObject.SetActive(false);
+        }
+        //tests for floor collision to handle gravity resetting
+        else if (collided.gameObject.tag == "Floor"){
+            Debug.Log("Landed on Floor: " + collided.GetComponent<Collider>());
+            gravity = -1f;
+            airborne = false;
+        }
+    }
+    //tests for leaving floor to make gravity increase
+    void OnTriggerExit(Collider collided){
+        if (collided.gameObject.tag == "Floor"){
+            Debug.Log("Left Floor: " + collided.GetComponent<Collider>());
+            gravity = -1f;
+            airborne = true;
+        }
+    }
+
 }
