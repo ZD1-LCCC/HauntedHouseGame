@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -533,10 +533,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4694520869510316932, guid: 3cb5eed284ab3b049ae5499b23bd5f27, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4694520869510316933, guid: 3cb5eed284ab3b049ae5499b23bd5f27, type: 3}
       propertyPath: m_text
       value: DefaultText
       objectReference: {fileID: 0}
+    - target: {fileID: 4694520869510316933, guid: 3cb5eed284ab3b049ae5499b23bd5f27, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 4694520869510316933, guid: 3cb5eed284ab3b049ae5499b23bd5f27, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 4694520869510316935, guid: 3cb5eed284ab3b049ae5499b23bd5f27, type: 3}
       propertyPath: m_Name
       value: RoomText
@@ -915,7 +927,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4105503704630041835, guid: 1ae7e9983225e2a4c8abbcf2a9b09b2f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -25.28
+      value: -19.5
       objectReference: {fileID: 0}
     - target: {fileID: 4105503704630041835, guid: 1ae7e9983225e2a4c8abbcf2a9b09b2f, type: 3}
       propertyPath: m_LocalRotation.w
