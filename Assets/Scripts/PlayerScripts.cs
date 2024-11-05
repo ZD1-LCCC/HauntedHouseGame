@@ -7,6 +7,8 @@ public class PlayerScripts : MonoBehaviour
     private CharacterController _cc;   
 
     public GameObject camera;
+    public GameObject invGameObject;
+    public int theOne;
     public float speed = 10.0f;
     const float GRAVITY = -5f;
     float gravity = -5f;
@@ -66,8 +68,9 @@ public class PlayerScripts : MonoBehaviour
 
         //actually moving the player, everything before is the logic for where to move
         _cc.Move(myPlayerDirection);
-
     }
+
+    //for colliding with trigger objects
     void OnTriggerEnter(Collider collided)
     {
         //outputs collision confirmation into log
@@ -77,6 +80,16 @@ public class PlayerScripts : MonoBehaviour
             //makes object that the player collided with go poof
             Debug.Log("Collided with Key Object: " + collided.GetComponent<Collider>());
             collided.gameObject.SetActive(false);
+
+            //save obj to work
+            invGameObject = collided.gameObject;
+            //add item to inventory list
+            //check if item exists as item, saves spot on list
+            FindinItemList();
+            if (theOne >= 0) { //if item exists, add to inventory
+                GameManager.instance.InventoryList.Add(GameManager.instance.theItems[theOne]);
+                Debug.Log("Found, added to list: " + GameManager.instance.theItems[theOne].itemDesc);
+            }
         }
         //tests for floor collision to handle gravity resetting
         else if (collided.gameObject.tag == "Floor"){
@@ -85,12 +98,22 @@ public class PlayerScripts : MonoBehaviour
             airborne = false;
         }
     }
-    //tests for leaving floor to make gravity increase
+
+    //tests for leaving floor to make gravity increase, not using for now
     void OnTriggerExit(Collider collided){
         if (collided.gameObject.tag == "Floor"){
             Debug.Log("Left Floor: " + collided.GetComponent<Collider>());
             gravity = -1f;
             airborne = true;
+        }
+    }
+
+    private void FindinItemList() {
+        for (int I=0; I<GameManager.instance.theItems.Count; ++I) {
+            if (GameManager.instance.theItems[I].itemName == invGameObject.name) {
+                theOne = I;
+                break;
+            }
         }
     }
 
