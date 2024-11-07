@@ -48,13 +48,8 @@ public class RoomController : MonoBehaviour
         //figure out the text
         string myText = GameManager.instance.roomInfo[sceneNumb-1,textNumb];
         
-
         //actually changes the text
         GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = myText;
-
-        //looks into game manager to find the room info array and output the string for the text
-        //GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = GameManager.instance.roomInfo[sceneNumb-1,0];
-
         
     }
 }

@@ -6,7 +6,7 @@ public class PlayerScripts : MonoBehaviour
 {
     private CharacterController _cc;   
 
-    public GameObject camera;
+    public GameObject camera2;
     public GameObject invGameObject;
     public int theOne;
     public float speed = 10.0f;
@@ -20,8 +20,8 @@ public class PlayerScripts : MonoBehaviour
     void Start()
     {
         _cc = GetComponent<CharacterController>();
-        camera = GameObject.Find("Main Camera");
-        camera.transform.position = gameObject.transform.position + new Vector3(0, 0.75f, 0);
+        camera2 = GameObject.Find("Main Camera");
+        camera2.transform.position = gameObject.transform.position + new Vector3(0, 0.75f, 0);
     }
 
     // Update is called once per frame
@@ -40,7 +40,7 @@ public class PlayerScripts : MonoBehaviour
         Vector3 myDirection = new Vector3(deltaX, gravity, deltaZ);
 
         //rotates the camera vertically with mouse
-        camera.transform.Rotate(Input.GetAxis("Mouse Y")*sensTurn*-1, 0, 0);
+        camera2.transform.Rotate(Input.GetAxis("Mouse Y")*sensTurn*-1, 0, 0);
         
         //if statement for clamping vertical rotation? not working currently 
         /*
@@ -51,6 +51,7 @@ public class PlayerScripts : MonoBehaviour
             camera.transform.rotation.x = -90;
         }
 
+        //jumping
         if (Input.GetButtonDown("Jump")) 
         {
             myDirection.y += jumpForce;
@@ -73,8 +74,7 @@ public class PlayerScripts : MonoBehaviour
     //for colliding with trigger objects
     void OnTriggerEnter(Collider collided)
     {
-        //outputs collision confirmation into log
-        //Debug.Log("Collision with " + collided.GetComponent<Collider>());
+        //if statement to check if item is a key object
         if (collided.gameObject.tag == "KeyObject")
         {
             //makes object that the player collided with go poof
@@ -83,15 +83,16 @@ public class PlayerScripts : MonoBehaviour
 
             //save obj to work
             invGameObject = collided.gameObject;
+
             //add item to inventory list
             //check if item exists as item, saves spot on list
             FindinItemList();
             if (theOne >= 0) { //if item exists, add to inventory
                 GameManager.instance.InventoryList.Add(GameManager.instance.theItems[theOne]);
-                Debug.Log("Found, added to list: " + GameManager.instance.theItems[theOne].itemDesc);
+                Debug.Log("Found and added to list: " + GameManager.instance.theItems[theOne].itemDesc);
             }
         }
-        //tests for floor collision to handle gravity resetting
+        //tests for floor collision to handle gravity resetting blah
         else if (collided.gameObject.tag == "Floor"){
             Debug.Log("Landed on Floor: " + collided.GetComponent<Collider>());
             gravity = -1f;
