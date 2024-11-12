@@ -24,8 +24,7 @@ public class PlayerPickup : MonoBehaviour
             //check if item exists as item, saves spot on list
             FindinItemList();
             if (theOne >= 0) { //if item exists, add to inventory
-                GameManager.instance.InventoryList.Add(GameManager.instance.theItems[theOne]);
-                Debug.Log("Found and added to list: " + GameManager.instance.theItems[theOne].itemDesc);
+                PickItUp(); //add to inventory list if it meets criteria
             }
         }
         //tests for floor collision to handle gravity resetting
@@ -42,6 +41,32 @@ public class PlayerPickup : MonoBehaviour
             if (GameManager.instance.theItems[I].itemName == invGameObject.name) {
                 theOne = I;
                 break;
+            }
+        }
+    }
+
+
+
+    private void PickItUp() {
+        //duplicate pickup check
+        bool haveIt = false;
+        foreach (Item item in GameManager.instance.InventoryList) {
+            if (item.itemName == invGameObject.name) {
+                haveIt = true;
+                break;
+            }
+            else {
+                
+            }
+        }
+        //carry amount check
+        if (!haveIt) {
+            if (GameManager.instance.InventoryList.Count >= 10) {
+                Debug.Log("You lost the game, why would you do that? You broke your back trying to carry everything");
+            }
+            else {
+                GameManager.instance.InventoryList.Add(GameManager.instance.theItems[theOne]);
+                Debug.Log("Found and added to list: " + GameManager.instance.theItems[theOne].itemDesc);
             }
         }
     }

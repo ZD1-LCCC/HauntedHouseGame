@@ -9,12 +9,26 @@ public class GameManager : MonoBehaviour
     
     public static GameManager instance;
 
-    //public bool[,] objectStatus = {0};
-
     //list to record inventory
     public List<Item> InventoryList = new List<Item>();
     //lits for all possible items
     public List<Item> theItems = new List<Item>();
+
+    //array for puzzle items needed for each room?
+    public string [][] roomNeedsArray = new string[][]
+        {
+            new string [1] {"FrontDoorKey"},                //room1 items needed to complete, check for items to see if puzzle is solved
+            new string [1] {"StolenObject"},                //room2 items needed to complete
+            new string [1] {"KitchenFreezerKey"},           //room3 items needed to complete
+            new string [1] {"RingBook"},                    //room4 items needed to complete, need actual ring
+            new string [1] {"RingBook"},      //room5 items needed to complete, need actual ring
+            new string [1] {"BasementKey"}                       //room6 items needed to complete
+        };
+    //variables to track how many puzzles are solved
+    public static int puzzlesSolved = 0;
+    //indices matching the needed items to the inventory list
+    public List<int> IndicesOfItemsFound = new List<int>();
+    public List<Item> InventoryUsed = new List<Item>();
 
     //array of sprite images for items
     public Sprite[] theSprites;
