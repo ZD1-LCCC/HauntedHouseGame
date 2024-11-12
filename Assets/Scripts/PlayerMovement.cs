@@ -7,8 +7,6 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController _cc;   
 
     public GameObject camera2;
-    public GameObject invGameObject;
-    public int theOne;
     public float speed = 10.0f;
     const float GRAVITY = -5f;
     float gravity = -5f;
