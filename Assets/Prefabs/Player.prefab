@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4105503704630041832}
   - component: {fileID: 4105503704630041839}
   - component: {fileID: 4105503704630041838}
+  - component: {fileID: -4898204514241362162}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -130,6 +131,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7534f64d3573243ae28ac926c07cf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
+  camera2: {fileID: 0}
+  invGameObject: {fileID: 0}
+  theOne: 0
   speed: 10
   sensTurn: 5
+--- !u!114 &-4898204514241362162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105503704630041837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f40eed9bb2e6d41ba4a9a11d4b1298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
