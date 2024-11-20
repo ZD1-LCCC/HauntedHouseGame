@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _cc = GetComponent<CharacterController>();
-        camera2 = GameObject.Find("Main Camera");
+        camera2 = GameObject.Find("Player Camera");
         camera2.transform.position = gameObject.transform.position + new Vector3(0, 0.75f, 0);
     }
 
@@ -68,16 +68,6 @@ public class PlayerMovement : MonoBehaviour
         //actually moving the player, everything before is the logic for where to move
         _cc.Move(myPlayerDirection);
     }
-
-    //tests for leaving floor to make gravity increase, not using for now 
-    /*
-    void OnTriggerExit(Collider collided){
-        if (collided.gameObject.tag == "Floor"){
-            Debug.Log("Left Floor: " + collided.GetComponent<Collider>());
-            gravity = -1f;
-            airborne = true;
-        }
-    }*/
 
     
 

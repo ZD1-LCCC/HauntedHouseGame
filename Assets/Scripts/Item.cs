@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class Item
 {
-    //readable name for item
+    //name for item
     public string itemName;
     //numeric id for item
     public int itemId;
+    //display name of item, for readability
+    public string displayName;
     //description of item
     public string itemDesc;
     //icon for inventory
@@ -17,10 +19,11 @@ public class Item
 
 
     //constructor
-    public Item(string name, int id, string desc) {
+    public Item(string name, int id, string display, string desc) {
         itemName = name;
         //roomId = room;
         itemId = id;
+        displayName = display;
         itemDesc = desc;
         //uses the file path and finds name to apply image to itemIcon
         itemIcon = Resources.Load<Texture2D>("SampleSprites/" + name);

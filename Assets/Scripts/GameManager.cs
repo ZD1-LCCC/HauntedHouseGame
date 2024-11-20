@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     
     public static GameManager instance;
 
+    public GameObject selectedObject = null;
+
     //list to record inventory
     public List<Item> InventoryList = new List<Item>();
     //lits for all possible items
@@ -67,14 +69,14 @@ public class GameManager : MonoBehaviour
         Debug.Log(theSprites.Length + " sprites have been loaded");
 
         //creates objects using Item class, need one for each item in game.
-        theItems.Add(new Item("FrontDoorKey", 0, "a key for the Front Door."));
-        theItems.Add(new Item("KitchenFreezerKey", 1, "a key for the Kitchen Freezer."));
-        theItems.Add(new Item("StolenObject", 2, "a stolen object."));
-        theItems.Add(new Item("FishBook", 3, "a book, smells fishy."));
-        theItems.Add(new Item("FishBook2", 4, "a book, smells fishy"));
-        theItems.Add(new Item("RingBook", 5, "a book that contains a ring."));
-        theItems.Add(new Item("Shovel", 6, "a shovel."));
-        theItems.Add(new Item("BasementKey", 7, "a key for the basement."));
+        theItems.Add(new Item("FrontDoorKey", 0, "Front Door Key", "a key for the Front Door."));
+        theItems.Add(new Item("KitchenFreezerKey", 1, "Kitchen Freezer Key", "a key for the Kitchen Freezer."));
+        theItems.Add(new Item("StolenObject", 2, "Stolen Object", "a stolen object.")); //need to know what the stolen object is?
+        theItems.Add(new Item("FishBook", 3, "Fisherman's Guide: Vol 1", "a book, smells fishy."));
+        theItems.Add(new Item("FishBook2", 4, "Fisherman's Guide: Vol 2", "a book, smells fishy"));
+        theItems.Add(new Item("RingBook", 5, "Widow's Diary", "a book that contains a ring."));
+        theItems.Add(new Item("Shovel", 6, "Shovel", "a shovel."));
+        theItems.Add(new Item("BasementKey", 7, "Basement Key", "a key for the basement."));
 
         //assigns sprites to each item
         foreach(Item anItem in theItems) {

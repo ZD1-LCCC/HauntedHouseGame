@@ -10,10 +10,20 @@ public class RoomController : MonoBehaviour
 {
     private GameManager gameManager;
 
+    private void Start() {
+        gameManager = GameManager.instance; // can delete maybe
+        LoadText();
+        if (GameManager.instance != null) {
+            Debug.Log("GM Found");
+        }
+        DisableCollectedItems();
+        CheckPuzzle(); //THEY SUDDENLY DONT WORK WHEN ON AWAKE FOR WHATEVER REASON SO I MOVED THEM TO START AND THEY WORK????
+    }
+
     private void Awake() {
         //get rid of objects that are already in the inventory
-        DisableCollectedItems();
-        CheckPuzzle(); //only there for now, put it on other things like the interactable fireplace?
+
+         //only there for now, put it on other things like the interactable fireplace?
     }
 
     public void DisableCollectedItems() {
@@ -21,23 +31,10 @@ public class RoomController : MonoBehaviour
         foreach (Item item in GameManager.instance.InventoryList) {
             GameObject anObject = GameObject.Find(item.itemName);
             if (anObject != null) {
-                //another if to find if it is a changing item aka book ashes
-                //if (item.name == || item.name == || item.name == ) {
-                //    Destroy
-                //}
-                //else
                     Destroy(anObject);
             }
         }
     }
-    // Start is called before the first frame update
-    private void Start() {
-        //load text method for accesability?
-        LoadText();
-        gameManager = GameManager.instance;
-    }
-
-
 
     public void LoadText() {
         //to get scene name and other info?
@@ -59,10 +56,11 @@ public class RoomController : MonoBehaviour
             textNumb = 1;
         }
         else {
-            textNumb = 1;
+            textNumb = 0;
         }
         //increment the number of times a room was entered
         ++GameManager.instance.numberEnter[sceneNumb-1];
+        Debug.Log(GameManager.instance.numberEnter[sceneNumb-1]);
         
         //figure out the text
         string myText = GameManager.instance.roomInfo[sceneNumb-1,textNumb];
@@ -115,6 +113,7 @@ public class RoomController : MonoBehaviour
 
         if (GameManager.puzzlesSolved == 6)  { //total ammount of puzzles solved
             Debug.Log("Good Job! You beat the game!");
+            SceneManager.LoadScene("WinScene");
         }
     }
 }
