@@ -863,23 +863,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!1 &1900836430 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ba3f52d4ab4e3a448a341433d5380ca, type: 3}
-  m_PrefabInstance: {fileID: 1403479462}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1900836431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1900836430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36463d733f6838c4492fbb09cffcdab4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2065397880
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1325,7 +1308,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450652400649558}
   m_Layer: 0
-  m_Name: forest shell
+  m_Name: Joseph_forest shell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
