@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject camera2;
     public float speed = 10.0f;
     const float GRAVITY = -5f;
-    float gravity = -5f;
+    float gravity = -9.8f;
     //float jumpForce = 500.0f;
     public float sensTurn = 5.0f;
     bool airborne = false;

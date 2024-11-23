@@ -10,20 +10,24 @@ public class RoomController : MonoBehaviour
 {
     private GameManager gameManager;
 
+    public GameObject player;
+
     private void Start() {
         gameManager = GameManager.instance; // can delete maybe
         LoadText();
-        if (GameManager.instance != null) {
+        /*if (GameManager.instance != null) {
             Debug.Log("GM Found");
-        }
+        } */
         DisableCollectedItems();
-        CheckPuzzle(); //THEY SUDDENLY DONT WORK WHEN ON AWAKE FOR WHATEVER REASON SO I MOVED THEM TO START AND THEY WORK????
+        //should remove this and put it somewhere else
+        //CheckPuzzle(); 
+        //THESE SUDDENLY DONT WORK WHEN ON AWAKE() FOR WHATEVER REASON SO I MOVED THEM TO START AND THEY WORK????
+
+        SpawnPlayer();
     }
 
     private void Awake() {
-        //get rid of objects that are already in the inventory
-
-         //only there for now, put it on other things like the interactable fireplace?
+        
     }
 
     public void DisableCollectedItems() {
@@ -43,7 +47,7 @@ public class RoomController : MonoBehaviour
         int textNumb = 0;
 
         string sceneNumber = sceneName.Substring(sceneName.Length-1);
-        Debug.Log("Room number is " + sceneNumber);
+        //Debug.Log("Room number is " + sceneNumber);
 
         int sceneNumb;
         sceneNumb = int.Parse(sceneNumber);
@@ -60,7 +64,7 @@ public class RoomController : MonoBehaviour
         }
         //increment the number of times a room was entered
         ++GameManager.instance.numberEnter[sceneNumb-1];
-        Debug.Log(GameManager.instance.numberEnter[sceneNumb-1]);
+        //Debug.Log(GameManager.instance.numberEnter[sceneNumb-1]);
         
         //figure out the text
         string myText = GameManager.instance.roomInfo[sceneNumb-1,textNumb];
@@ -114,6 +118,32 @@ public class RoomController : MonoBehaviour
         if (GameManager.puzzlesSolved == 6)  { //total ammount of puzzles solved
             Debug.Log("Good Job! You beat the game!");
             SceneManager.LoadScene("WinScene");
+        }
+    }
+
+    private void SpawnPlayer() {
+        //find scene number
+        int sceneCurrent = int.Parse(SceneManager.GetActiveScene().name.Substring(SceneManager.GetActiveScene().name.Length-1)) - 1;
+
+        GameObject spawn = null;
+
+        //spawn point object reference
+        if (GameManager.instance.doorFrom > 0 && GameManager.instance.doorFrom <= 6) {
+            spawn = GameObject.Find("SpawnPoint" + GameManager.instance.roomConnectorSpawns[sceneCurrent,(GameManager.instance.doorFrom - 1)].ToString());
+            Debug.Log(spawn.name);
+        }
+        else {
+            Debug.Log("Unknown room entered from!");
+        }
+        
+        if (spawn != null) {
+            //spawn player to spawn point
+            //player.transform.position = spawn.transform.position;
+            Instantiate(player, spawn.transform.position, spawn.transform.rotation);
+        }
+        else {
+            Instantiate(player, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
+            Debug.Log("Spawning at 0,0,0!");
         }
     }
 }

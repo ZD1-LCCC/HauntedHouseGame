@@ -16,6 +16,19 @@ public class GameManager : MonoBehaviour
     //lits for all possible items
     public List<Item> theItems = new List<Item>();
 
+    //int to store where the the player came from
+    public int doorFrom = 0;
+
+    //int array to handle what room has what spawn number: [room in currently, room entered from]
+    public int[,] roomConnectorSpawns = {
+        {0,1,0,0,2,3},
+        {1,0,2,3,0,0},
+        {0,1,0,0,0,0},
+        {0,1,0,0,0,0},
+        {1,0,0,0,0,0},
+        {1,0,0,0,0,0}
+    };
+
     //array for puzzle items needed for each room?
     public string [][] roomNeedsArray = new string[][]
         {

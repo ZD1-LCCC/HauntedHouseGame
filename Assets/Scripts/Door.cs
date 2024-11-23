@@ -20,11 +20,11 @@ public class Door : MonoBehaviour
 
     //find the scene name
     string sceneName = SceneManager.GetActiveScene().name;
-    Debug.Log("The active scene name is " + sceneName);
+    //Debug.Log("The active scene name is " + sceneName);
 
     //find door number by converting into integer
     string sceneNumStr = sceneName.Substring(sceneName.Length - 1);
-    Debug.Log("The scene num is " + sceneNumStr);
+    //Debug.Log("The scene num is " + sceneNumStr);
 
     //to convert to int
     int sceneNum;
@@ -50,7 +50,8 @@ public class Door : MonoBehaviour
             goNext = sceneNum;
             break;
     }
-    Debug.Log("The Destination is room#" + goNext);
+    //Debug.Log("The Destination is room#" + goNext);
+    GameManager.instance.doorFrom = sceneNum;
     
     //convert to use as string name
     string NumToStr = goNext.ToString();
