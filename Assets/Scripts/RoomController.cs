@@ -8,20 +8,18 @@ using TMPro;
 
 public class RoomController : MonoBehaviour
 {
-    private GameManager gameManager;
+    //private GameManager gameManager;
 
     public GameObject player;
 
     private void Start() {
-        gameManager = GameManager.instance; // can delete maybe
+        //gameManager = GameManager.instance; // can delete maybe
         LoadText();
-        /*if (GameManager.instance != null) {
-            Debug.Log("GM Found");
-        } */
+        //ClearTheHUD();
+        InitInventory();
         DisableCollectedItems();
-        //should remove this and put it somewhere else
-        //CheckPuzzle(); 
-        //THESE SUDDENLY DONT WORK WHEN ON AWAKE() FOR WHATEVER REASON SO I MOVED THEM TO START AND THEY WORK????
+        //CheckPuzzle(); should remove this and put it somewhere else
+        //THESE SUDDENLY DONT WORK WHEN ON AWAKE() BECAUSE THEY CANNOT SEE THE GAME MANAGER FOR WHATEVER REASON SO I MOVED THEM TO START AND THEY WORK????
 
         SpawnPlayer();
     }
@@ -146,4 +144,67 @@ public class RoomController : MonoBehaviour
             Debug.Log("Spawning at 0,0,0!");
         }
     }
+
+    private void InitInventory() {
+        int whichOne = 1;
+        Texture2D tex;
+        Sprite mySprite;
+
+        foreach(Item item in GameManager.instance.InventoryList) {
+            //find the gameobject for each image
+            GameObject anObject = GameObject.Find("Image" + whichOne);
+
+            //set texture to found sprite
+            tex = item.itemIcon;
+
+            //create sprite with texture
+            mySprite = Sprite.Create(tex, new Rect(0,0,64,64), new Vector2(0.5f, 0.5f));
+
+            //sets the objects sprite to the found sprite
+            anObject.GetComponent<Image>().sprite = mySprite;
+
+            //counter
+            ++whichOne;
+        }
+    }
+
+    public void ClearTheHUD() {
+        //Clear out the hud
+        string imgName;
+        GameObject invGameObj;
+        Image myImageComponent;
+
+
+        for(int k = 1; k < 11; k++) {
+            imgName = "Image" + k.ToString();
+            invGameObj = GameObject.Find(imgName);
+            myImageComponent = invGameObj.GetComponent<Image>();
+            myImageComponent.sprite = null;
+        }
+    }
+
+    public void LoadTheHUD() {
+        int imgNumber = 1;
+        Image myImageComponent;
+
+        foreach(Item anItem in GameManager.instance.InventoryList) {
+            //get image name for position
+            string theImageName;
+            theImageName = "Image" + imgNumber.ToString();
+
+            GameObject anObject = GameObject.Find(theImageName);
+            myImageComponent = anObject.GetComponent<Image>();
+
+            //build the Sprite
+            Texture2D tex = anItem.itemIcon;
+            Sprite mySprite = Sprite.Create(tex, new Rect(0,0,64,64), new Vector2(0.5f, 0.5f));
+
+            //post the sprite to the image object
+            myImageComponent.sprite = mySprite;
+
+            //counter
+            imgNumber++;
+        }
+    }
+    
 }

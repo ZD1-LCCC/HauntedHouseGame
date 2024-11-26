@@ -27,6 +27,7 @@ public class PlayerPickup : MonoBehaviour
                 FindinItemList(invGameObject.name);
                 if (theOne >= 0) { //if item exists, add to inventory
                     PickItUp(); //add to inventory list if it meets criteria
+                    ShowInHUD();
                 }
             }
         }
@@ -91,5 +92,32 @@ public class PlayerPickup : MonoBehaviour
                 Debug.Log("Found and added to list: " + GameManager.instance.theItems[theOne].itemDesc);
             }
         }
+    }
+
+    private void ShowInHUD() {
+        Debug.Log("Attempting to find item sprite...");
+        Texture2D tex;
+        Sprite mySprite;
+        string theName;
+        int whichOne;
+        
+        //get number for the newest inventory item
+        whichOne = GameManager.instance.InventoryList.Count;
+
+        //find name of hud image to paste it
+        theName = "Image" + whichOne;
+
+        Debug.Log("Looking for " + theName);
+        GameObject anObject = GameObject.Find(theName);
+
+        //get texture from the list
+        tex = GameManager.instance.InventoryList[whichOne - 1].itemIcon;
+
+        //create the Sprite
+        mySprite = Sprite.Create(tex, new Rect(0,0,64,64), new Vector2(0.5f, 0.5f));
+
+        //put new sprite in appropriate block
+        anObject.GetComponent<Image>().sprite = mySprite;
+        
     }
 }
