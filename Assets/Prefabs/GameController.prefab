@@ -44,3 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c50f9fd2f52394682be058e6f03ae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedObject: {fileID: 0}
+  InventoryList: []
+  theItems: []
+  doorFrom: -1
+  IndicesOfItemsFound: 
+  InventoryUsed: []
+  theSprites: []
+  filePath: SampleSprites
+  numberEnter: 000000000000000000000000000000000000000000000000

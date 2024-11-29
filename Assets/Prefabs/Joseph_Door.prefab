@@ -177,10 +177,9 @@ GameObject:
   - component: {fileID: 3863253465391979017}
   - component: {fileID: 7408288634223949851}
   - component: {fileID: 1573295022}
-  - component: {fileID: 1573295023}
   m_Layer: 0
   m_Name: Joseph_Door
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -229,18 +228,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 5, z: 2}
   m_Center: {x: 0, y: 3, z: 0.5}
---- !u!114 &1573295023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4528044117708243123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36463d733f6838c4492fbb09cffcdab4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5419262331010388399
 GameObject:
   m_ObjectHideFlags: 0

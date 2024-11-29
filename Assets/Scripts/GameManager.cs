@@ -17,7 +17,37 @@ public class GameManager : MonoBehaviour
     public List<Item> theItems = new List<Item>();
 
     //int to store where the the player came from
-    public int doorFrom = 0;
+    public int doorFrom = -1;
+
+    //handles room connections
+    public int[,] roomGridArray = {
+        {2,6,0,5},
+        {0,3,1,4},
+        {2,0,0,0},
+        {0,0,2,0},
+        {0,0,0,1},
+        {0,0,0,1}
+    };
+
+    //parallel array for locked doors (North, East, South, West)
+    public bool[,] lockedDoorArray = {
+        {true, false, false, true},
+        {false, false, false, false},
+        {false, false, false, false},
+        {false, false, false, false},
+        {false, false, false, false},
+        {false, false, false, false}
+    };
+
+    //array for destination names
+    public string[,] roomNameArray = {
+        {"Foyer", "Graveyard", "", "Basement"},
+        {"", "Kitchen", "Forest", "Library"},
+        {"Foyer", "", "", ""},
+        {"", "", "Foyer", ""},
+        {"", "" , "", "Forest"},
+        {"", "" , "", "Forest"}
+    };
 
     //int array to handle what room has what spawn number: [room in currently, room entered from]
     public int[,] roomConnectorSpawns = {

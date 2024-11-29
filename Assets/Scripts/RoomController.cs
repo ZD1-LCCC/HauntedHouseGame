@@ -13,14 +13,12 @@ public class RoomController : MonoBehaviour
     public GameObject player;
 
     private void Start() {
-        //gameManager = GameManager.instance; // can delete maybe
         LoadText();
-        //ClearTheHUD();
+        //ClearTheHUD(); not really needed
         InitInventory();
         DisableCollectedItems();
         //CheckPuzzle(); should remove this and put it somewhere else
         //THESE SUDDENLY DONT WORK WHEN ON AWAKE() BECAUSE THEY CANNOT SEE THE GAME MANAGER FOR WHATEVER REASON SO I MOVED THEM TO START AND THEY WORK????
-
         SpawnPlayer();
     }
 
@@ -126,9 +124,11 @@ public class RoomController : MonoBehaviour
         GameObject spawn = null;
 
         //spawn point object reference
-        if (GameManager.instance.doorFrom > 0 && GameManager.instance.doorFrom <= 6) {
-            spawn = GameObject.Find("SpawnPoint" + GameManager.instance.roomConnectorSpawns[sceneCurrent,(GameManager.instance.doorFrom - 1)].ToString());
-            Debug.Log(spawn.name);
+        if (GameManager.instance.doorFrom >= 0 && GameManager.instance.doorFrom < 6) {
+            spawn = GameObject.Find("SpawnPoint" + GameManager.instance.roomConnectorSpawns[sceneCurrent,(GameManager.instance.doorFrom)].ToString());
+            Debug.Log(GameManager.instance.doorFrom);
+            if (spawn != null)
+                Debug.Log(spawn.name);
         }
         else {
             Debug.Log("Unknown room entered from!");

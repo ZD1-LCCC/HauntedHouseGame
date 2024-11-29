@@ -190,18 +190,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 576.3106, y: 960.9526, z: 160.94415}
   m_Center: {x: -0.0020503998, y: -0.00009536743, z: -68.66555}
---- !u!114 &335796934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5201906402460970357}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36463d733f6838c4492fbb09cffcdab4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &376331395
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -598,7 +586,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!65 &834291662
 BoxCollider:
@@ -8568,10 +8556,9 @@ GameObject:
   - component: {fileID: 1904463148362896272}
   - component: {fileID: 7727049754074644580}
   - component: {fileID: 335796932}
-  - component: {fileID: 335796934}
   m_Layer: 0
   m_Name: WestDoor
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
