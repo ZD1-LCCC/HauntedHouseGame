@@ -7,6 +7,9 @@ TagManager:
   - KeyObject
   - Floor
   - Door
+  - Diggable
+  - Locked
+  - NPC
   layers:
   - Default
   - TransparentFX

@@ -59,18 +59,44 @@ public class GameManager : MonoBehaviour
         {1,0,0,0,0,0}
     };
 
-    //array for puzzle items needed for each room?
+    //bool array to store if item has been interacted with yet
+    public bool [][] interactableArray = new bool[][] {
+        new bool [1] {false}, //room1: car door
+        new bool [0] {}, //room2: nothing
+        new bool [1] {false}, //room3: kitchen freezer door
+        new bool [1] {false}, //room4: fireplace interaction spot
+        new bool [0] {}, //room5: nothing?
+        new bool [0] {}  //room6: nothing
+    };
+
+    //displayname for the interactables
+    /*
+    public string [][] interactableDisplayNames = new string[][] {
+        new string [1] {false}, //room1: car door
+        new string [0] {}, //room2: nothing
+        new string [1] {false}, //room3: kitchen freezer door
+        new string [1] {false}, //room4: fireplace interaction spot
+        new string [0] {}, //room5: nothing?
+        new string [9] {false, false, false, false, false, false, false, false, false}  //room6: graves 1-8, key grave
+    };  */
+
+    //array for puzzle items needed for each room? currently making obsolete
     public string [][] roomNeedsArray = new string[][]
-        {
-            new string [1] {"FrontDoorKey"},                //room1 items needed to complete, check for items to see if puzzle is solved
-            new string [1] {"StolenObject"},                //room2 items needed to complete
-            new string [1] {"KitchenFreezerKey"},           //room3 items needed to complete
-            new string [1] {"RingBook"},                    //room4 items needed to complete, need actual ring
-            new string [1] {"RingBook"},      //room5 items needed to complete, need actual ring
-            new string [1] {"BasementKey"}                       //room6 items needed to complete
-        };
-    //variables to track how many puzzles are solved
+    {
+        new string [1] {"FrontDoorKey"},                //room1 items needed to complete, check for items to see if puzzle is solved
+        new string [1] {"StolenObject"},                //room2 items needed to complete
+        new string [1] {"KitchenFreezerKey"},           //room3 items needed to complete
+        new string [1] {"RingBook"},                    //room4 items needed to complete, need actual ring
+        new string [1] {"RingBook"},      //room5 items needed to complete, need actual ring
+        new string [1] {"BasementKey"}                       //room6 items needed to complete
+    };
+//variables to track how many puzzles are solved
+    //integer for hopw many have been completed, 4 in total?
     public static int puzzlesSolved = 0;
+    //array to store which puzzle was completed
+    public bool[] puzzlesList = {false, false, false, false};
+
+
     //indices matching the needed items to the inventory list
     public List<int> IndicesOfItemsFound = new List<int>();
     public List<Item> InventoryUsed = new List<Item>();
@@ -119,11 +145,88 @@ public class GameManager : MonoBehaviour
         theItems.Add(new Item("FishBook2", 4, "Fisherman's Guide: Vol 2", "a book, smells fishy"));
         theItems.Add(new Item("RingBook", 5, "Widow's Diary", "a book that contains a ring."));
         theItems.Add(new Item("Shovel", 6, "Shovel", "a shovel."));
-        theItems.Add(new Item("BasementKey", 7, "Basement Key", "a key for the basement."));
+        theItems.Add(new Item("GraveDirt1", 7, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt2", 8, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt3", 9, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt4", 10, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt5", 11, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt6", 12, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt7", 13, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt8", 14, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt9", 15, "Basement Key", "a key for the basement."));
+        theItems.Add(new Item("RingBook", 16, "Wedding Ring", "a key for the basement."));
 
         //assigns sprites to each item
         foreach(Item anItem in theItems) {
             anItem.itemIcon = Resources.Load<Texture2D>("SampleSprites/" + anItem.itemName);
         }
     }
+
+    public void CheckPuzzle(int puzz) {
+        if (puzzlesList[puzz - 1] == false) {
+            ++puzzlesSolved;
+            puzzlesList[puzz - 1] = true;
+            Debug.Log("Puzzle solved! " + puzz);
+        }
+        else
+            Debug.Log("Puzzle already complete " + puzz.ToString());
+
+        if (puzzlesSolved == 4) {
+            Debug.Log("Good Job! You beat the game!");
+            SceneManager.LoadScene("WinScene");
+        }
+    }
+    public bool CompletedPuzzles() {
+        if (puzzlesSolved == 4) 
+            return true;
+        else
+            return false;
+    }
+
+    /* old version of it
+        //find the room number?
+        string theCurrentScene = SceneManager.GetActiveScene().name;
+        string theRoomNumber = theCurrentScene.Substring(5);
+        int roomInteger = int.Parse(theRoomNumber);
+
+        //what stuff to solve
+        int totItemsNeeded = GameManager.instance.roomNeedsArray[roomInteger-1].Length;
+        Debug.Log("Room "+theRoomNumber+" needs "+totItemsNeeded+ " items.");
+
+        //items match Check
+        int totItemsFound = 0;
+        GameManager.instance.IndicesOfItemsFound.Clear();
+        for (int i = 0; i < totItemsNeeded; ++i) {
+            string theItemToFind = GameManager.instance.roomNeedsArray[roomInteger - 1][i];
+            if (string.IsNullOrEmpty(theItemToFind)) {
+                break;
+            }
+            else {
+            //ITS AN ARROW? THAT MAKES NO SENSE                             VVVV    
+            int theIndex = GameManager.instance.InventoryList.FindIndex(Item => Item.itemName == theItemToFind);
+                if(theIndex != -1) {
+                    totItemsFound += 1;
+                    GameManager.instance.IndicesOfItemsFound.Add(theIndex); //dot after add
+                }
+            }
+        }
+
+        if (totItemsFound == totItemsNeeded) {
+            GameManager.puzzlesSolved += 1;
+            for (int i = 0; i < GameManager.instance.IndicesOfItemsFound.Count; ++i) {
+                int whichItem = GameManager.instance.IndicesOfItemsFound[i];
+                //move item from the invetorylist to inventorylist used
+                GameManager.instance.InventoryUsed.Add(GameManager.instance.InventoryList[whichItem]);
+                //add logic to tell player that the puzzle was solved
+                Debug.Log("Good Job! You solved a puzzle!");
+            }
+            //refresh and cleanup
+            GameManager.instance.IndicesOfItemsFound.Clear();
+        }
+
+        if (GameManager.puzzlesSolved == 6)  { //total ammount of puzzles solved
+            Debug.Log("Good Job! You beat the game!");
+            SceneManager.LoadScene("WinScene");
+        }
+        */
 }

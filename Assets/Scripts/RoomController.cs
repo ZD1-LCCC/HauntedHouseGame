@@ -27,12 +27,46 @@ public class RoomController : MonoBehaviour
     }
 
     public void DisableCollectedItems() {
+        int currentRoom = int.Parse(SceneManager.GetActiveScene().name.Substring(SceneManager.GetActiveScene().name.Length-1));
+        //string objectName = "";
+        //GameObject objectWork = null;
         //if an item is in my inventory, remove it from the scene wont work with puzzle
         foreach (Item item in GameManager.instance.InventoryList) {
             GameObject anObject = GameObject.Find(item.itemName);
             if (anObject != null) {
                     Destroy(anObject);
             }
+        }
+
+        //switch to handle different rooms having different interactions that need to be kept between rooms
+        switch(currentRoom) {
+            case 1:
+                //waiting on car model
+                Debug.Log("Room#1 INIT Completed!");
+                break;
+            case 2:
+                Debug.Log("Room#2 INIT Completed!");
+                break;
+            case 3:
+                //need to remove door and replace with opened door
+                if (GameManager.instance.interactableArray[2][0] == true) {
+                    //deletes it, but doesn't replace it
+                    Destroy(GameObject.Find("FreezerDoorLocked"));
+                }
+                Debug.Log("Room#3 INIT Completed!");
+                break;
+            case 4: 
+                Debug.Log("Room#4 INIT Completed!");
+                break;
+            case 5:
+                Debug.Log("Room#5 INIT Completed!");
+                break;
+            case 6:
+                Debug.Log("Room#6 INIT Completed!");
+                break;
+            default:
+                Debug.Log("Unknown room: " + currentRoom.ToString());
+                break;
         }
     }
 
@@ -70,52 +104,7 @@ public class RoomController : MonoBehaviour
         
     }
 
-    public void CheckPuzzle() {
-        //find the room number?
-        string theCurrentScene = SceneManager.GetActiveScene().name;
-        string theRoomNumber = theCurrentScene.Substring(5);
-        int roomInteger = int.Parse(theRoomNumber);
-
-        //what stuff to solve
-        int totItemsNeeded = GameManager.instance.roomNeedsArray[roomInteger-1].Length;
-        Debug.Log("Room "+theRoomNumber+" needs "+totItemsNeeded+ " items.");
-
-        //items match Check
-        int totItemsFound = 0;
-        GameManager.instance.IndicesOfItemsFound.Clear();
-        for (int i = 0; i < totItemsNeeded; ++i) {
-            string theItemToFind = GameManager.instance.roomNeedsArray[roomInteger - 1][i];
-            if (string.IsNullOrEmpty(theItemToFind)) {
-                break;
-            }
-            else {
-            //ITS AN ARROW? THAT MAKES NO SENSE                             VVVV    
-            int theIndex = GameManager.instance.InventoryList.FindIndex(Item => Item.itemName == theItemToFind);
-                if(theIndex != -1) {
-                    totItemsFound += 1;
-                    GameManager.instance.IndicesOfItemsFound.Add(theIndex); //dot after add
-                }
-            }
-        }
-
-        if (totItemsFound == totItemsNeeded) {
-            GameManager.puzzlesSolved += 1;
-            for (int i = 0; i < GameManager.instance.IndicesOfItemsFound.Count; ++i) {
-                int whichItem = GameManager.instance.IndicesOfItemsFound[i];
-                //move item from the invetorylist to inventorylist used
-                GameManager.instance.InventoryUsed.Add(GameManager.instance.InventoryList[whichItem]);
-                //add logic to tell player that the puzzle was solved
-                Debug.Log("Good Job! You solved a puzzle!");
-            }
-            //refresh and cleanup
-            GameManager.instance.IndicesOfItemsFound.Clear();
-        }
-
-        if (GameManager.puzzlesSolved == 6)  { //total ammount of puzzles solved
-            Debug.Log("Good Job! You beat the game!");
-            SceneManager.LoadScene("WinScene");
-        }
-    }
+    
 
     private void SpawnPlayer() {
         //find scene number
@@ -182,29 +171,4 @@ public class RoomController : MonoBehaviour
             myImageComponent.sprite = null;
         }
     }
-
-    public void LoadTheHUD() {
-        int imgNumber = 1;
-        Image myImageComponent;
-
-        foreach(Item anItem in GameManager.instance.InventoryList) {
-            //get image name for position
-            string theImageName;
-            theImageName = "Image" + imgNumber.ToString();
-
-            GameObject anObject = GameObject.Find(theImageName);
-            myImageComponent = anObject.GetComponent<Image>();
-
-            //build the Sprite
-            Texture2D tex = anItem.itemIcon;
-            Sprite mySprite = Sprite.Create(tex, new Rect(0,0,64,64), new Vector2(0.5f, 0.5f));
-
-            //post the sprite to the image object
-            myImageComponent.sprite = mySprite;
-
-            //counter
-            imgNumber++;
-        }
-    }
-    
 }
