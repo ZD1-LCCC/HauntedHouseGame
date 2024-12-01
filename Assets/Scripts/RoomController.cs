@@ -134,7 +134,7 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    private void InitInventory() {
+    public static void InitInventory() {
         int whichOne = 1;
         Texture2D tex;
         Sprite mySprite;
@@ -157,14 +157,14 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    public void ClearTheHUD() {
+    public static void ClearTheHUD() {
         //Clear out the hud
         string imgName;
         GameObject invGameObj;
         Image myImageComponent;
 
 
-        for(int k = 1; k < 11; k++) {
+        for(int k = 1; k < 7; k++) {
             imgName = "Image" + k.ToString();
             invGameObj = GameObject.Find(imgName);
             myImageComponent = invGameObj.GetComponent<Image>();

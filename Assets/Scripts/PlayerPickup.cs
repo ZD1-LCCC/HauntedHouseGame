@@ -7,12 +7,14 @@ using TMPro;
 
 public class PlayerPickup : MonoBehaviour
 {
-    
+    public GameObject LoseHUD;
     public int theOne;
     public GameObject invGameObject;
     public string itemName;
     public string roomDestination;
 
+    //holds the index of the burnable item
+    public int itemIndex = -1;
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.E)) {
@@ -63,7 +65,7 @@ public class PlayerPickup : MonoBehaviour
                 }
                 else if (GameManager.instance.selectedObject.gameObject.tag == "NPC") {
                     foreach (Item item in GameManager.instance.InventoryList) {
-                        if (item == GameManager.instance.theItems[5]) {
+                        if (item == GameManager.instance.theItems[16]) {
                             GameManager.instance.CheckPuzzle(4);
                             GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "You should be at the win screen by now! Congrats on this sequence break!";
                             break;
@@ -71,6 +73,47 @@ public class PlayerPickup : MonoBehaviour
                         else {
                             GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "Me and [ghostname] have fallen in love. The only thing we need to make it official is a wedding ring. I don’t want to leave her side, can you find one for me?";
                         }
+                    }
+                }
+                else if (GameManager.instance.selectedObject.gameObject.tag == "Fireplace") {
+                    BurnItem();
+                    switch (GameManager.instance.InventoryList[itemIndex].itemId) {
+                        case 3:
+                            GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[17];
+                            RoomController.ClearTheHUD();
+                            RoomController.InitInventory();
+                            if (FindBurnable() == true) {
+                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
+                            }
+                            else {
+                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
+                            }
+                            break;
+                        case 4:
+                            GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[18];
+                            RoomController.ClearTheHUD();
+                            RoomController.InitInventory();
+                            if (FindBurnable() == true) {
+                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
+                            }
+                            else {
+                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
+                            }
+                            break;
+                        case 5:
+                            GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[16];
+                            RoomController.ClearTheHUD();
+                            RoomController.InitInventory();
+                            if (FindBurnable() == true) {
+                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
+                            }
+                            else {
+                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
+                            }
+                            break;
+                        default:
+                            Debug.Log("Unknown item + " + GameManager.instance.InventoryList[itemIndex].displayName);
+                            break;
                     }
                 }
             }
@@ -143,6 +186,16 @@ public class PlayerPickup : MonoBehaviour
             Debug.Log("Collided with NPC: " + collided.name);
             GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Talk";
         }
+        else if (collided.gameObject.tag == "Fireplace") {
+            Debug.Log("Collided with Fireplace");
+            if (FindBurnable() == true) {
+                GameManager.instance.selectedObject = collided.gameObject;
+                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
+            }
+            else {
+                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
+            }
+        }
     }
 
     void OnTriggerExit(Collider collided) {
@@ -171,6 +224,12 @@ public class PlayerPickup : MonoBehaviour
             Debug.Log("Left collision with NPC: " + collided.name);
             GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
+        else if (collided.gameObject.tag == "Fireplace") {
+            GameManager.instance.selectedObject = null;
+            itemIndex = -1;
+            Debug.Log("Left collision with Fireplace");
+            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
+        }
     }
 
     private void FindinItemList(string name) {
@@ -194,10 +253,17 @@ public class PlayerPickup : MonoBehaviour
                 
             }
         }
-        //carry amount check
+        //carry amount check, to lose game
         if (!haveIt) {
-            if (GameManager.instance.InventoryList.Count >= 10) {
+            if (GameManager.instance.InventoryList.Count >= 6) {
+                //detach camera from player, delete player, add HUD to "lose" the game
                 Debug.Log("You lost the game, why would you do that? You broke your back trying to carry everything");
+                Transform camera2 = GameObject.Find("Player Camera").GetComponent<Transform>();
+                GameObject player = GameObject.Find("Player(Clone)");
+                camera2.parent = null;
+                Destroy(player);
+                Instantiate(LoseHUD);
+
             }
             else {
                 GameManager.instance.InventoryList.Add(GameManager.instance.theItems[theOne]);
@@ -305,5 +371,21 @@ public class PlayerPickup : MonoBehaviour
             lockedText = "Unknown door.";
         }
         
+    }
+
+    private bool FindBurnable() {
+        foreach (Item item in GameManager.instance.InventoryList) {
+            if ((item == GameManager.instance.theItems[3]) || (item == GameManager.instance.theItems[4]) || (item == GameManager.instance.theItems[5])) {
+                itemIndex = GameManager.instance.InventoryList.IndexOf(item);
+                Debug.Log("true");
+                return true;
+            }
+        }
+        Debug.Log("false");
+        return false;
+    }
+
+    private void BurnItem() {
+
     }
 }

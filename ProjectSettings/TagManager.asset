@@ -10,6 +10,7 @@ TagManager:
   - Diggable
   - Locked
   - NPC
+  - Fireplace
   layers:
   - Default
   - TransparentFX

@@ -19,13 +19,12 @@ public class Item
 
 
     //constructor
-    public Item(string name, int id, string display, string desc) {
+    public Item(string name, string icon, int id, string display, string desc) {
         itemName = name;
-        //roomId = room;
         itemId = id;
         displayName = display;
         itemDesc = desc;
-        //uses the file path and finds name to apply image to itemIcon
-        itemIcon = Resources.Load<Texture2D>("SampleSprites/" + name);
+        //uses the file path and icon name to apply image to itemIcon
+        itemIcon = Resources.Load<Texture2D>("SampleSprites/" + icon);
     }
 }

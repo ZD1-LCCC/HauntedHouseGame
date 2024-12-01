@@ -92,14 +92,9 @@ public class GameManager : MonoBehaviour
     };
 //variables to track how many puzzles are solved
     //integer for hopw many have been completed, 4 in total?
-    public static int puzzlesSolved = 0;
+    public int puzzlesSolved = 0;
     //array to store which puzzle was completed
     public bool[] puzzlesList = {false, false, false, false};
-
-
-    //indices matching the needed items to the inventory list
-    public List<int> IndicesOfItemsFound = new List<int>();
-    public List<Item> InventoryUsed = new List<Item>();
 
     //array of sprite images for items
     public Sprite[] theSprites;
@@ -138,28 +133,26 @@ public class GameManager : MonoBehaviour
         Debug.Log(theSprites.Length + " sprites have been loaded");
 
         //creates objects using Item class, need one for each item in game.
-        theItems.Add(new Item("FrontDoorKey", 0, "Front Door Key", "a key for the Front Door."));
-        theItems.Add(new Item("KitchenFreezerKey", 1, "Kitchen Freezer Key", "a key for the Kitchen Freezer."));
-        theItems.Add(new Item("StolenObject", 2, "Stolen Object", "a stolen object.")); //need to know what the stolen object is?
-        theItems.Add(new Item("FishBook", 3, "Fisherman's Guide: Vol 1", "a book, smells fishy."));
-        theItems.Add(new Item("FishBook2", 4, "Fisherman's Guide: Vol 2", "a book, smells fishy"));
-        theItems.Add(new Item("RingBook", 5, "Widow's Diary", "a book that contains a ring."));
-        theItems.Add(new Item("Shovel", 6, "Shovel", "a shovel."));
-        theItems.Add(new Item("GraveDirt1", 7, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt2", 8, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt3", 9, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt4", 10, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt5", 11, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt6", 12, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt7", 13, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt8", 14, "Dirt", "a pile of dirt from a grave"));
-        theItems.Add(new Item("GraveDirt9", 15, "Basement Key", "a key for the basement."));
-        theItems.Add(new Item("RingBook", 16, "Wedding Ring", "a key for the basement."));
+        theItems.Add(new Item("FrontDoorKey", "FrontDoorKey", 0, "Front Door Key", "a key for the Front Door."));
+        theItems.Add(new Item("KitchenFreezerKey", "KitchenFreezerKey", 1, "Kitchen Freezer Key", "a key for the Kitchen Freezer."));
+        theItems.Add(new Item("StolenObject", "StolenObject", 2, "Stolen Object", "a stolen object.")); //need to know what the stolen object is?
+        theItems.Add(new Item("FishBook", "FishBook", 3, "Fisherman's Guide: Vol 1", "a book, smells fishy."));
+        theItems.Add(new Item("FishBook2", "FishBook", 4, "Fisherman's Guide: Vol 2", "a book, smells fishy"));
+        theItems.Add(new Item("RingBook", "RingBook", 5, "Widow's Diary", "a book that contains a ring."));
+        theItems.Add(new Item("Shovel", "Shovel", 6, "Shovel", "a shovel."));
+        theItems.Add(new Item("GraveDirt1", "GraveDirt", 7, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt2", "GraveDirt", 8, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt3", "GraveDirt", 9, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt4", "GraveDirt", 10, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt5", "GraveDirt", 11, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt6", "GraveDirt", 12, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt7", "GraveDirt", 13, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt8", "GraveDirt", 14, "Dirt", "a pile of dirt from a grave"));
+        theItems.Add(new Item("GraveDirt9", "BasementKey", 15, "Basement Key", "a key for the basement."));
+        theItems.Add(new Item("RingBook", "WeddingRing", 16, "Wedding Ring", "a key for the basement."));
+        theItems.Add(new Item("FishBook", "RedHerring", 17, "Red Herring", "I think I might have done something wrong."));
+        theItems.Add(new Item("FishBook2", "RedHerring", 18, "Red Herring", "I think I might have done something wrong."));
 
-        //assigns sprites to each item
-        foreach(Item anItem in theItems) {
-            anItem.itemIcon = Resources.Load<Texture2D>("SampleSprites/" + anItem.itemName);
-        }
     }
 
     public void CheckPuzzle(int puzz) {

@@ -147,9 +147,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f40eed9bb2e6d41ba4a9a11d4b1298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LoseHUD: {fileID: 2870771196274280794, guid: 0cc90441751920342a4bd6f10e5d0a74, type: 3}
   theOne: 0
   invGameObject: {fileID: 0}
   itemName: 
+  roomDestination: 
 --- !u!1 &6699261085378563945
 GameObject:
   m_ObjectHideFlags: 0
