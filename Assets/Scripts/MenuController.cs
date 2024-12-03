@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
+    
     public void ReStart() {
         //reset values to completely restart the game
         ResetValues();
@@ -15,7 +16,8 @@ public class MenuController : MonoBehaviour
     
     public void Exit() {
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        //commented out cause it prevents me from building the game
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
 
     private void ResetValues() {
@@ -31,6 +33,7 @@ public class MenuController : MonoBehaviour
 
         //resets interactables
         GM.interactableArray[2][0] = false;
+        GM.interactableArray[0][0] = false;
 
         //resets the doorfron munber to prevent errors of the player spawning
         GM.doorFrom = -1;

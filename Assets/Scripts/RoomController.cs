@@ -8,18 +8,18 @@ using TMPro;
 
 public class RoomController : MonoBehaviour
 {
-    //private GameManager gameManager;
-
+    public static GameObject freezerDoorOpened;
+    public static GameObject carOpened;
+    public static GameObject frontDoorKey;
     public GameObject player;
-
     private void Start() {
         LoadText();
-        //ClearTheHUD(); not really needed
+        ClearTheHUD(); //not really needed but why not
         InitInventory();
         DisableCollectedItems();
-        //CheckPuzzle(); should remove this and put it somewhere else
         //THESE SUDDENLY DONT WORK WHEN ON AWAKE() BECAUSE THEY CANNOT SEE THE GAME MANAGER FOR WHATEVER REASON SO I MOVED THEM TO START AND THEY WORK????
         SpawnPlayer();
+        UpdateInventorySelect(GameManager.instance.inventorySelect);
     }
 
     private void Awake() {
@@ -41,7 +41,16 @@ public class RoomController : MonoBehaviour
         //switch to handle different rooms having different interactions that need to be kept between rooms
         switch(currentRoom) {
             case 1:
-                //waiting on car model
+                //swaps closed car with opened car
+                if (GameManager.instance.interactableArray[0][0] == true) {
+                    GameObject.Find("Car").SetActive(false);
+                }
+                else {
+                    carOpened = GameObject.Find("CarOpened");
+                    carOpened.SetActive(false);
+                    //frontDoorKey = GameObject.Find("FrontDoorKey");
+                    //frontDoorKey.SetActive(false);
+                }
                 Debug.Log("Room#1 INIT Completed!");
                 break;
             case 2:
@@ -50,8 +59,13 @@ public class RoomController : MonoBehaviour
             case 3:
                 //need to remove door and replace with opened door
                 if (GameManager.instance.interactableArray[2][0] == true) {
-                    //deletes it, but doesn't replace it
-                    Destroy(GameObject.Find("FreezerDoorLocked"));
+                    //deletes locked door, leaving the opened door
+                    GameObject.Find("FreezerDoorLocked").SetActive(false);
+                }
+                else {
+                    //deletes opened door, leaving locked door
+                    freezerDoorOpened = GameObject.Find("FreezerDoorOpened");
+                    freezerDoorOpened.SetActive(false);
                 }
                 Debug.Log("Room#3 INIT Completed!");
                 break;
@@ -169,6 +183,45 @@ public class RoomController : MonoBehaviour
             invGameObj = GameObject.Find(imgName);
             myImageComponent = invGameObj.GetComponent<Image>();
             myImageComponent.sprite = null;
+        }
+    }
+
+        //increases or decreases the inventory selection by i,
+    public static void UpdateInventorySelect(int i) {
+        int holding;
+        string imgName;
+        GameObject imgObj;
+        //if i was decreased below 0, wrap around to 5
+        if (i < 0) {
+            GameManager.instance.inventorySelect = 5;
+        }
+        //if i was increased above 5, wrap around to 0
+        else if (i >= 6) {
+            GameManager.instance.inventorySelect = 0;
+        }
+        //if above 0 but below 6, it is valid and can be used as a value
+        else {
+            GameManager.instance.inventorySelect = i;
+        }
+        //changes image color to default for all
+        for (int x = 1; x < 7; ++x) {
+            imgName = "Image" + x.ToString();
+            imgObj = GameObject.Find(imgName);
+            imgObj.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        }
+
+        //changes image color for selected item
+        holding = GameManager.instance.inventorySelect + 1;
+        imgName = "Image" + holding.ToString();
+        imgObj = GameObject.Find(imgName);
+        imgObj.GetComponent<Image>().color = new Color32(255, 255, 255, 125);
+
+        //changes the text to match the item's display name
+        if (GameManager.instance.InventoryList.Count > GameManager.instance.inventorySelect) {
+            GameObject.Find("ItemName").GetComponent<TextMeshProUGUI>().text = GameManager.instance.InventoryList[GameManager.instance.inventorySelect].displayName;
+        }
+        else {
+            GameObject.Find("ItemName").GetComponent<TextMeshProUGUI>().text = "";
         }
     }
 }

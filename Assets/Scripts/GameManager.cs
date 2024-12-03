@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    
+    public int inventorySelect = 0;
     public static GameManager instance;
 
     public GameObject selectedObject = null;
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     //array for destination names
     public string[,] roomNameArray = {
         {"Foyer", "Graveyard", "", "Basement"},
-        {"", "Kitchen", "Forest", "Library"},
+        {"", "Kitchen", "Forest", "Study"},
         {"Foyer", "", "", ""},
         {"", "", "Foyer", ""},
         {"", "" , "", "Forest"},
@@ -68,17 +68,6 @@ public class GameManager : MonoBehaviour
         new bool [0] {}, //room5: nothing?
         new bool [0] {}  //room6: nothing
     };
-
-    //displayname for the interactables
-    /*
-    public string [][] interactableDisplayNames = new string[][] {
-        new string [1] {false}, //room1: car door
-        new string [0] {}, //room2: nothing
-        new string [1] {false}, //room3: kitchen freezer door
-        new string [1] {false}, //room4: fireplace interaction spot
-        new string [0] {}, //room5: nothing?
-        new string [9] {false, false, false, false, false, false, false, false, false}  //room6: graves 1-8, key grave
-    };  */
 
     //array for puzzle items needed for each room? currently making obsolete
     public string [][] roomNeedsArray = new string[][]
@@ -106,12 +95,12 @@ public class GameManager : MonoBehaviour
 
     //strings for room text
     public string[,] roomInfo = {
-        {"So this is where he disappeared to? Doesn’t look too haunted.","The trees are so dense, it’s like you are walled in.","Not yet"},
-        {"Is that a wall made of ghosts?","Seems like the only room I can access is the kitchen.","Not yet"},
-        {"An entire walk-in freezer, they must’ve been rich.","Starting to get hungry","Not yet"},
-        {"Anything good to read in here?","I'm surprised that the fireplace is working.","Not yet"},
-        {"What was that? Is someone down here?","I hope that banging sound wasn’t coming from down here.","Not yet"},
-        {"A graveyard next to a house? That is not a good sign.","The silence is deafening.","Not yet"}
+        {"So this is where he disappeared to? Doesn’t look too haunted.", "I think I heard noises coming from the basement.", "Not yet"},
+        {"What a nice house.", "Did I see something in that vase?", "Not yet"},
+        {"An entire walk-in freezer, they must’ve been rich.", "The key must be in the house somehwere.", "Not yet"},
+        {"Man, I wish I could read.", "I'm surprised that the fireplace is working.", "Not yet"},
+        {"What was that? Is someone down here?", "I hope that banging sound wasn’t coming from down here.", "Not yet"},
+        {"A graveyard next to a house? That is not a good sign.", "I wonder if the ghosts would mind if I dug up their stuff?", "Not yet"}
     };
     
     void Awake() {
@@ -166,6 +155,7 @@ public class GameManager : MonoBehaviour
 
         if (puzzlesSolved == 4) {
             Debug.Log("Good Job! You beat the game!");
+            Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("WinScene");
         }
     }

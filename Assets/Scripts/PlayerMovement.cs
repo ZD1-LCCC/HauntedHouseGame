@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,9 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 10.0f;
     const float GRAVITY = -5f;
     float gravity = -9.8f;
-    //float jumpForce = 500.0f;
+    float camXAxis;
     public float sensTurn = 5.0f;
-    bool airborne = false;
+    //bool airborne = false;
 
     // Start is called before the first frame update 
     void Start()
@@ -20,41 +22,51 @@ public class PlayerMovement : MonoBehaviour
         _cc = GetComponent<CharacterController>();
         camera2 = GameObject.Find("Player Camera");
         camera2.transform.position = gameObject.transform.position + new Vector3(0, 0.75f, 0);
+        //attempt to lock cursor
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (airborne == true && gravity >= -20){
-            gravity += GRAVITY * Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            RoomController.UpdateInventorySelect(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            RoomController.UpdateInventorySelect(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) {
+            RoomController.UpdateInventorySelect(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4)) {
+            RoomController.UpdateInventorySelect(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5)) {
+            RoomController.UpdateInventorySelect(4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6)) {
+            RoomController.UpdateInventorySelect(5);
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) {
+            RoomController.UpdateInventorySelect(++GameManager.instance.inventorySelect);
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") < 0f) {
+            RoomController.UpdateInventorySelect(--GameManager.instance.inventorySelect);
         }
         
-        //turn when mouse left and right
-        transform.Rotate(0, Input.GetAxis("Mouse X")*sensTurn, 0);
-
         float deltaX = Input.GetAxis("Horizontal")*speed;
         float deltaZ = Input.GetAxis("Vertical")*speed;
 
         Vector3 myDirection = new Vector3(deltaX, gravity, deltaZ);
 
         //rotates the camera vertically with mouse
-        camera2.transform.Rotate(Input.GetAxis("Mouse Y")*sensTurn*-1, 0, 0);
-        
-        //if statement for clamping vertical rotation? not working currently 
-        /*
-        if (camera.transform.rotation.x >= -90) {
-            camera.transform.rotation.x = -90;
-        }
-        else if (camera.transform.rotation.x >= 180) {
-            camera.transform.rotation.x = -90;
-        }
+        camXAxis += Input.GetAxis("Mouse Y")*sensTurn*-1;
+        //Debug.Log(this.gameObject.transform.rotation.y);
+        camXAxis = Mathf.Clamp(camXAxis, -90f, 90f);
+        camera2.transform.localRotation = Quaternion.Euler(camXAxis, 0f, 0f);
 
-        //jumping
-        if (Input.GetButtonDown("Jump")) 
-        {
-            myDirection.y += jumpForce;
-        }   
-        */
+        //turn when mouse left and right
+        transform.Rotate(0, Input.GetAxis("Mouse X")*sensTurn, 0);
 
         //adjust for framerate
         myDirection = myDirection * Time.deltaTime;
@@ -69,6 +81,5 @@ public class PlayerMovement : MonoBehaviour
         _cc.Move(myPlayerDirection);
     }
 
-    
 
 }

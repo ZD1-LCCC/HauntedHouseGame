@@ -11,6 +11,7 @@ TagManager:
   - Locked
   - NPC
   - Fireplace
+  - Openable
   layers:
   - Default
   - TransparentFX

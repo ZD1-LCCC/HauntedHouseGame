@@ -56,12 +56,25 @@ public class PlayerPickup : MonoBehaviour
                     }
                 }
                 else if (GameManager.instance.selectedObject.gameObject.tag == "Locked") {
-                    //unlock door by removing it and replacing it
+                    //unlock door by disabling the locked version and enabling opened version
                     GameManager.instance.interactableArray[2][0] = true;
-                    Destroy(GameManager.instance.selectedObject);
+                    //sets closed door to inactive
+                    GameManager.instance.selectedObject.SetActive(false);
+                    //sets opened door to active
+                    RoomController.freezerDoorOpened.SetActive(true);
                     GameManager.instance.selectedObject = null;
                     GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
                     GameManager.instance.CheckPuzzle(2);
+                }
+                else if (GameManager.instance.selectedObject.gameObject.tag == "Openable") {
+                    //changes the saved value for the door being opened
+                    GameManager.instance.interactableArray[0][0] = true;
+                    //disables the closed car
+                    GameManager.instance.selectedObject.SetActive(false);
+                    //enables the opened car (and key since child)
+                    RoomController.carOpened.SetActive(true);
+                    GameManager.instance.selectedObject = null;
+                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
                 }
                 else if (GameManager.instance.selectedObject.gameObject.tag == "NPC") {
                     foreach (Item item in GameManager.instance.InventoryList) {
@@ -117,6 +130,7 @@ public class PlayerPickup : MonoBehaviour
                     }
                 }
             }
+            RoomController.UpdateInventorySelect(GameManager.instance.inventorySelect);
         }
     }
 
@@ -181,6 +195,11 @@ public class PlayerPickup : MonoBehaviour
                 GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Locked";
             }
         }
+        else if (collided.gameObject.tag == "Openable") {
+            Debug.Log("Collided with Openable: " + collided.name);
+            GameManager.instance.selectedObject = collided.gameObject;
+            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Open: " + collided.name;
+        }
         else if (collided.gameObject.tag == "NPC") {
             GameManager.instance.selectedObject = collided.gameObject;
             Debug.Log("Collided with NPC: " + collided.name);
@@ -217,6 +236,11 @@ public class PlayerPickup : MonoBehaviour
         else if (collided.gameObject.tag == "Locked") {
             GameManager.instance.selectedObject = null;
             Debug.Log("Left collision with Locked Door: " + collided.name);
+            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
+        }
+        else if (collided.gameObject.tag == "Openable") {
+            GameManager.instance.selectedObject = null;
+            Debug.Log("Left collision with Openable: " + collided.name);
             GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
         else if (collided.gameObject.tag == "NPC") {
@@ -262,6 +286,7 @@ public class PlayerPickup : MonoBehaviour
                 GameObject player = GameObject.Find("Player(Clone)");
                 camera2.parent = null;
                 Destroy(player);
+                Cursor.lockState = CursorLockMode.None;
                 Instantiate(LoseHUD);
 
             }
