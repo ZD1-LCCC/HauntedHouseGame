@@ -51,10 +51,10 @@ public class PlayerMovement : MonoBehaviour
                 RoomController.UpdateInventorySelect(5);
             }
             if (Input.GetAxis("Mouse ScrollWheel") > 0f) {
-                RoomController.UpdateInventorySelect(++GameManager.instance.inventorySelect);
+                RoomController.UpdateInventorySelect(--GameManager.instance.inventorySelect);
             }
             if (Input.GetAxis("Mouse ScrollWheel") < 0f) {
-                RoomController.UpdateInventorySelect(--GameManager.instance.inventorySelect);
+                RoomController.UpdateInventorySelect(++GameManager.instance.inventorySelect);
             }
             
             float deltaX = Input.GetAxis("Horizontal")*speed;
