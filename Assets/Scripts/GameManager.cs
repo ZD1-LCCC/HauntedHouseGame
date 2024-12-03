@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public bool pauseValue = false;
     public int inventorySelect = 0;
     public static GameManager instance;
 

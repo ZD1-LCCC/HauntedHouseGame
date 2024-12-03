@@ -20,12 +20,22 @@ public class MenuController : MonoBehaviour
         //UnityEditor.EditorApplication.isPlaying = false;
     }
 
+    public static void Unpause() {
+        GameManager.instance.pauseValue = false;
+        Destroy(GameObject.Find("PauseHUD(Clone)"));
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     private void ResetValues() {
         GameManager GM = GameManager.instance;
+
+        //just for safety, unpauses the game when restarting
+        GM.pauseValue = false;
+
         //resets the locked door array by unlocking all doors then locking the ones that are supposed to be unlocked
         for (int x = 0; x < 6; ++x) {
             for (int y = 0; y < 4; ++y) {
-                GameManager.instance.lockedDoorArray[x,y] = false;
+                GM.lockedDoorArray[x,y] = false;
             }
         }
         GM.lockedDoorArray[0,0] = true;

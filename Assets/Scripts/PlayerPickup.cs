@@ -17,120 +17,122 @@ public class PlayerPickup : MonoBehaviour
     public int itemIndex = -1;
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.E)) {
-            if (GameManager.instance.selectedObject != null) {
-                if (GameManager.instance.selectedObject.gameObject.tag == "KeyObject" || GameManager.instance.selectedObject.gameObject.tag == "Diggable") {
-                    //saves object while working
-                    invGameObject = GameManager.instance.selectedObject;
+        if (GameManager.instance.pauseValue == false) {
+            if (Input.GetKeyDown(KeyCode.E)) {
+                if (GameManager.instance.selectedObject != null) {
+                    if (GameManager.instance.selectedObject.gameObject.tag == "KeyObject" || GameManager.instance.selectedObject.gameObject.tag == "Diggable") {
+                        //saves object while working
+                        invGameObject = GameManager.instance.selectedObject;
 
-                    //disables object and resets item prompt
-                    GameManager.instance.selectedObject.SetActive(false);
-                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
-                    GameManager.instance.selectedObject = null;
-
-                    //check if item exists as item, saves spot on list
-                    FindinItemList(invGameObject.name);
-                    if (theOne >= 0) { //if item exists, add to inventory
-                        PickItUp(); //add to inventory list if it meets criteria
-                        ShowInHUD();
-                    }
-                }
-                else if (GameManager.instance.selectedObject.gameObject.tag == "Door") {
-                    //find the scene number
-                    int scene = int.Parse(SceneManager.GetActiveScene().name.Substring(SceneManager.GetActiveScene().name.Length-1)) - 1;
-                    //find door number
-                    int door = DoorNumberConvert(GameManager.instance.selectedObject.gameObject.name);
-                    //if door isn't locked
-                    if (GameManager.instance.lockedDoorArray[scene, door] == false) {
-                        //sets the scene that the player entered from for finding the correct spawn position
-                        GameManager.instance.doorFrom = scene;
+                        //disables object and resets item prompt
+                        GameManager.instance.selectedObject.SetActive(false);
+                        GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
                         GameManager.instance.selectedObject = null;
-                        //moves player to room
-                        MoveToRoom(scene, door);
-                    }
 
-                    //else if door is locked
-                    else {
-                        //changes room text if locked without key, unlocks door if you have key, and moves you if unlocked
-                        LockedDoorTest(scene, door);
-                    }
-                }
-                else if (GameManager.instance.selectedObject.gameObject.tag == "Locked") {
-                    //unlock door by disabling the locked version and enabling opened version
-                    GameManager.instance.interactableArray[2][0] = true;
-                    //sets closed door to inactive
-                    GameManager.instance.selectedObject.SetActive(false);
-                    //sets opened door to active
-                    RoomController.freezerDoorOpened.SetActive(true);
-                    GameManager.instance.selectedObject = null;
-                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
-                    GameManager.instance.CheckPuzzle(2);
-                }
-                else if (GameManager.instance.selectedObject.gameObject.tag == "Openable") {
-                    //changes the saved value for the door being opened
-                    GameManager.instance.interactableArray[0][0] = true;
-                    //disables the closed car
-                    GameManager.instance.selectedObject.SetActive(false);
-                    //enables the opened car (and key since child)
-                    RoomController.carOpened.SetActive(true);
-                    GameManager.instance.selectedObject = null;
-                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
-                }
-                else if (GameManager.instance.selectedObject.gameObject.tag == "NPC") {
-                    foreach (Item item in GameManager.instance.InventoryList) {
-                        if (item == GameManager.instance.theItems[16]) {
-                            GameManager.instance.CheckPuzzle(4);
-                            GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "You should be at the win screen by now! Congrats on this sequence break!";
-                            break;
+                        //check if item exists as item, saves spot on list
+                        FindinItemList(invGameObject.name);
+                        if (theOne >= 0) { //if item exists, add to inventory
+                            PickItUp(); //add to inventory list if it meets criteria
+                            ShowInHUD();
                         }
+                    }
+                    else if (GameManager.instance.selectedObject.gameObject.tag == "Door") {
+                        //find the scene number
+                        int scene = int.Parse(SceneManager.GetActiveScene().name.Substring(SceneManager.GetActiveScene().name.Length-1)) - 1;
+                        //find door number
+                        int door = DoorNumberConvert(GameManager.instance.selectedObject.gameObject.name);
+                        //if door isn't locked
+                        if (GameManager.instance.lockedDoorArray[scene, door] == false) {
+                            //sets the scene that the player entered from for finding the correct spawn position
+                            GameManager.instance.doorFrom = scene;
+                            GameManager.instance.selectedObject = null;
+                            //moves player to room
+                            MoveToRoom(scene, door);
+                        }
+
+                        //else if door is locked
                         else {
-                            GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "Me and [ghostname] have fallen in love. The only thing we need to make it official is a wedding ring. I don’t want to leave her side, can you find one for me?";
+                            //changes room text if locked without key, unlocks door if you have key, and moves you if unlocked
+                            LockedDoorTest(scene, door);
+                        }
+                    }
+                    else if (GameManager.instance.selectedObject.gameObject.tag == "Locked") {
+                        //unlock door by disabling the locked version and enabling opened version
+                        GameManager.instance.interactableArray[2][0] = true;
+                        //sets closed door to inactive
+                        GameManager.instance.selectedObject.SetActive(false);
+                        //sets opened door to active
+                        RoomController.freezerDoorOpened.SetActive(true);
+                        GameManager.instance.selectedObject = null;
+                        GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
+                        GameManager.instance.CheckPuzzle(2);
+                    }
+                    else if (GameManager.instance.selectedObject.gameObject.tag == "Openable") {
+                        //changes the saved value for the door being opened
+                        GameManager.instance.interactableArray[0][0] = true;
+                        //disables the closed car
+                        GameManager.instance.selectedObject.SetActive(false);
+                        //enables the opened car (and key since child)
+                        RoomController.carOpened.SetActive(true);
+                        GameManager.instance.selectedObject = null;
+                        GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
+                    }
+                    else if (GameManager.instance.selectedObject.gameObject.tag == "NPC") {
+                        foreach (Item item in GameManager.instance.InventoryList) {
+                            if (item == GameManager.instance.theItems[16]) {
+                                GameManager.instance.CheckPuzzle(4);
+                                GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "You should be at the win screen by now! Congrats on this sequence break!";
+                                break;
+                            }
+                            else {
+                                GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "Me and [ghostname] have fallen in love. The only thing we need to make it official is a wedding ring. I don’t want to leave her side, can you find one for me?";
+                            }
+                        }
+                    }
+                    else if (GameManager.instance.selectedObject.gameObject.tag == "Fireplace") {
+                        BurnItem();
+                        switch (GameManager.instance.InventoryList[itemIndex].itemId) {
+                            case 3:
+                                GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[17];
+                                RoomController.ClearTheHUD();
+                                RoomController.InitInventory();
+                                if (FindBurnable() == true) {
+                                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
+                                }
+                                else {
+                                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
+                                }
+                                break;
+                            case 4:
+                                GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[18];
+                                RoomController.ClearTheHUD();
+                                RoomController.InitInventory();
+                                if (FindBurnable() == true) {
+                                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
+                                }
+                                else {
+                                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
+                                }
+                                break;
+                            case 5:
+                                GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[16];
+                                RoomController.ClearTheHUD();
+                                RoomController.InitInventory();
+                                if (FindBurnable() == true) {
+                                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
+                                }
+                                else {
+                                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
+                                }
+                                break;
+                            default:
+                                Debug.Log("Unknown item + " + GameManager.instance.InventoryList[itemIndex].displayName);
+                                break;
                         }
                     }
                 }
-                else if (GameManager.instance.selectedObject.gameObject.tag == "Fireplace") {
-                    BurnItem();
-                    switch (GameManager.instance.InventoryList[itemIndex].itemId) {
-                        case 3:
-                            GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[17];
-                            RoomController.ClearTheHUD();
-                            RoomController.InitInventory();
-                            if (FindBurnable() == true) {
-                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
-                            }
-                            else {
-                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
-                            }
-                            break;
-                        case 4:
-                            GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[18];
-                            RoomController.ClearTheHUD();
-                            RoomController.InitInventory();
-                            if (FindBurnable() == true) {
-                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
-                            }
-                            else {
-                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
-                            }
-                            break;
-                        case 5:
-                            GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[16];
-                            RoomController.ClearTheHUD();
-                            RoomController.InitInventory();
-                            if (FindBurnable() == true) {
-                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Burn: " + GameManager.instance.InventoryList[itemIndex].displayName;
-                            }
-                            else {
-                                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Nothing to Burn";
-                            }
-                            break;
-                        default:
-                            Debug.Log("Unknown item + " + GameManager.instance.InventoryList[itemIndex].displayName);
-                            break;
-                    }
-                }
+                RoomController.UpdateInventorySelect(GameManager.instance.inventorySelect);
             }
-            RoomController.UpdateInventorySelect(GameManager.instance.inventorySelect);
         }
     }
 

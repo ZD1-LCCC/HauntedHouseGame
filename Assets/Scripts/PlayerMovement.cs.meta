@@ -3,7 +3,9 @@ guid: 1a7534f64d3573243ae28ac926c07cf0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - PauseHUD: {fileID: 6254307227285723326, guid: 4f1f3d9eb33c33b4189eac0c52d1ed64, type: 3}
+  - camera2: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
