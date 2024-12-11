@@ -41,31 +41,47 @@ public class PlayerPickup : MonoBehaviour
                         int scene = int.Parse(SceneManager.GetActiveScene().name.Substring(SceneManager.GetActiveScene().name.Length-1)) - 1;
                         //find door number
                         int door = DoorNumberConvert(GameManager.instance.selectedObject.gameObject.name);
-                        //if door isn't locked
-                        if (GameManager.instance.lockedDoorArray[scene, door] == false) {
-                            //sets the scene that the player entered from for finding the correct spawn position
-                            GameManager.instance.doorFrom = scene;
-                            GameManager.instance.selectedObject = null;
-                            //moves player to room
-                            MoveToRoom(scene, door);
-                        }
-
-                        //else if door is locked
-                        else {
-                            //changes room text if locked without key, unlocks door if you have key, and moves you if unlocked
-                            LockedDoorTest(scene, door);
-                        }
+                        //sets the scene that the player entered from for finding the correct spawn position
+                        GameManager.instance.doorFrom = scene;
+                        GameManager.instance.selectedObject = null;
+                        //moves player to room
+                        MoveToRoom(scene, door);
                     }
                     else if (GameManager.instance.selectedObject.gameObject.tag == "Locked") {
-                        //unlock door by disabling the locked version and enabling opened version
-                        GameManager.instance.interactableArray[2][0] = true;
-                        //sets closed door to inactive
-                        GameManager.instance.selectedObject.SetActive(false);
-                        //sets opened door to active
-                        RoomController.freezerDoorOpened.SetActive(true);
+                        if (GameManager.instance.selectedObject.name == "Freezer") {
+                            //unlock door by disabling the locked version and enabling opened version
+                            GameManager.instance.interactableArray[2][0] = true;
+                            //sets closed door to inactive
+                            GameManager.instance.selectedObject.SetActive(false);
+                            //sets opened door to active
+                            RoomController.disObj1.SetActive(true);
+                            GameManager.instance.CheckPuzzle(2);
+                        }
+                        else if (GameManager.instance.selectedObject.name == "Basement Door") {
+                            //save the value meaning that the door has been opened
+                            GameManager.instance.interactableArray[0][1] = true;
+                            //sets the closed version to inactive
+                            GameManager.instance.selectedObject.SetActive(false);
+                            //sets the opened version to active
+                            RoomController.disObj2.SetActive(true);
+                            //complete puzzle 
+                            GameManager.instance.CheckPuzzle(3);
+                        }
+                        else if (GameManager.instance.selectedObject.name == "Foyer Door") {
+                            //save the value meaning that the door has been opened
+                            GameManager.instance.interactableArray[0][2] = true;
+                            //sets the closed version to inactive
+                            GameManager.instance.selectedObject.SetActive(false);
+                            //sets the opened version to active
+                            RoomController.disObj3.SetActive(true);
+                            //complete puzzle 
+                            GameManager.instance.CheckPuzzle(1);
+                            //resets room text to prevent confusion
+                            GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "";
+                        }
+
                         GameManager.instance.selectedObject = null;
                         GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
-                        GameManager.instance.CheckPuzzle(2);
                     }
                     else if (GameManager.instance.selectedObject.gameObject.tag == "Openable") {
                         //changes the saved value for the door being opened
@@ -73,7 +89,7 @@ public class PlayerPickup : MonoBehaviour
                         //disables the closed car
                         GameManager.instance.selectedObject.SetActive(false);
                         //enables the opened car (and key since child)
-                        RoomController.carOpened.SetActive(true);
+                        RoomController.disObj1.SetActive(true);
                         GameManager.instance.selectedObject = null;
                         GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
                     }
@@ -90,7 +106,7 @@ public class PlayerPickup : MonoBehaviour
                         }
                     }
                     else if (GameManager.instance.selectedObject.gameObject.tag == "Fireplace") {
-                        BurnItem();
+                        //BurnItem(); forgot to delete
                         switch (GameManager.instance.InventoryList[itemIndex].itemId) {
                             case 3:
                                 GameManager.instance.InventoryList[itemIndex] = GameManager.instance.theItems[17];
@@ -164,8 +180,6 @@ public class PlayerPickup : MonoBehaviour
 
             //use array to find destination name
             roomDestination = GameManager.instance.roomNameArray[sceneCurrent, doorNum];
-            //FindinItemList(collided.name);
-            //itemName = GameManager.instance.theItems[theOne].displayName;
             GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Open: " + roomDestination;
         }
         else if (collided.gameObject.tag == "Diggable") {
@@ -183,18 +197,27 @@ public class PlayerPickup : MonoBehaviour
         else if (collided.gameObject.tag == "Locked") {
             Debug.Log("Collided with Locked Door: " + collided.name);
             foreach (Item item in GameManager.instance.InventoryList) {
-                if (item == GameManager.instance.theItems[1]) {
+                //combined all if/else statements into one since they all do the same function
+                //checks what the name of the locked object is then if the player has the key to it
+                if (collided.name == "Foyer Door" && item == GameManager.instance.theItems[0] || 
+                    collided.name == "Freezer" && item == GameManager.instance.theItems[1] || 
+                    collided.name == "Basement Door" && item == GameManager.instance.theItems[15]) {
+
                     GameManager.instance.selectedObject = collided.gameObject;
-                    //just using "Grave" for the name cause they are supposed to be similar
-                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Unlock";
+                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Unlock: " + collided.name;
                     break;
                 }
                 else {
-                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Locked";
+                    //needed because if you have items in inventory but not the right one
+                    GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Locked: " + collided.name;
                 }
             }
             if (GameManager.instance.InventoryList.Count == 0) {
-                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Locked";
+                GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "[E] Locked: " + collided.name;
+            }
+            //gives a hint for front door key
+            if (collided.name == "Foyer Door") {
+                GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = "I think I forgot the key in my car.";
             }
         }
         else if (collided.gameObject.tag == "Openable") {
@@ -221,41 +244,30 @@ public class PlayerPickup : MonoBehaviour
 
     void OnTriggerExit(Collider collided) {
         if (collided.gameObject.tag == "KeyObject") {
-            GameManager.instance.selectedObject = null;
             Debug.Log("Left collision with Key Object: " + collided.name);
-            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
         else if (collided.gameObject.tag == "Door") {
-            GameManager.instance.selectedObject = null;
             Debug.Log("Left collision with Door: " + collided.name);
-            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
         else if (collided.gameObject.tag == "Diggable") {
-            GameManager.instance.selectedObject = null;
             Debug.Log("Left collision with Grave Dig Spot: " + collided.name);
-            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
         else if (collided.gameObject.tag == "Locked") {
-            GameManager.instance.selectedObject = null;
             Debug.Log("Left collision with Locked Door: " + collided.name);
-            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
         else if (collided.gameObject.tag == "Openable") {
-            GameManager.instance.selectedObject = null;
             Debug.Log("Left collision with Openable: " + collided.name);
-            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
         else if (collided.gameObject.tag == "NPC") {
-            GameManager.instance.selectedObject = null;
             Debug.Log("Left collision with NPC: " + collided.name);
-            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
         }
         else if (collided.gameObject.tag == "Fireplace") {
-            GameManager.instance.selectedObject = null;
             itemIndex = -1;
             Debug.Log("Left collision with Fireplace");
-            GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
+            
         }
+        GameManager.instance.selectedObject = null;
+        GameObject.Find("ItemPrompt").GetComponent<TextMeshProUGUI>().text = "";
     }
 
     private void FindinItemList(string name) {
@@ -281,7 +293,7 @@ public class PlayerPickup : MonoBehaviour
         }
         //carry amount check, to lose game
         if (!haveIt) {
-            if (GameManager.instance.InventoryList.Count >= 6) {
+            if (GameManager.instance.InventoryList.Count >= GameManager.instance.invMax) {
                 //detach camera from player, delete player, add HUD to "lose" the game
                 Debug.Log("You lost the game, why would you do that? You broke your back trying to carry everything");
                 Transform camera2 = GameObject.Find("Player Camera").GetComponent<Transform>();
@@ -351,55 +363,6 @@ public class PlayerPickup : MonoBehaviour
             SceneManager.LoadScene(nextScene);
         }
     }
-
-    public void LockedDoorTest(int scene, int door) {
-        string lockedText = "Error";
-        if (door == 0) {
-            lockedText = "Locked. I think I forgot the key in my car.";
-            //doesn't work without an item in inventory
-            if (GameManager.instance.InventoryList.Count == 0) {
-                GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = lockedText;
-            }
-            else {
-                foreach(Item item in GameManager.instance.InventoryList) {
-                    if (item == GameManager.instance.theItems[0]) {
-                        GameManager.instance.lockedDoorArray[scene, door] = false;
-                        GameManager.instance.doorFrom = scene;
-                        GameManager.instance.selectedObject = null;
-                        //unlocking this door solves the first puzzle
-                        GameManager.instance.CheckPuzzle(1);
-                        MoveToRoom(scene, door);
-                        break;
-                    }
-                    GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = lockedText;
-                }
-            }
-        }
-        else if (door == 3) {
-            lockedText = "Locked.";
-            if (GameManager.instance.InventoryList.Count == 0) {
-                GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = lockedText;
-            }
-            else {
-                foreach(Item item in GameManager.instance.InventoryList) {
-                    if (item == GameManager.instance.theItems[15]) {
-                        GameManager.instance.lockedDoorArray[scene, door] = false;
-                        GameManager.instance.doorFrom = scene;
-                        GameManager.instance.selectedObject = null;
-                        GameManager.instance.CheckPuzzle(3);
-                        MoveToRoom(scene, door);
-                        break;
-                    }
-                    GameObject.Find("RoomText").GetComponent<TextMeshProUGUI>().text = lockedText;
-                }
-            }
-        }
-        else {
-            lockedText = "Unknown door.";
-        }
-        
-    }
-
     private bool FindBurnable() {
         foreach (Item item in GameManager.instance.InventoryList) {
             if ((item == GameManager.instance.theItems[3]) || (item == GameManager.instance.theItems[4]) || (item == GameManager.instance.theItems[5])) {
@@ -410,9 +373,5 @@ public class PlayerPickup : MonoBehaviour
         }
         Debug.Log("false");
         return false;
-    }
-
-    private void BurnItem() {
-
     }
 }

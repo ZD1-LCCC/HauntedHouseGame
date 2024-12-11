@@ -6,20 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    //maximum items in inventory
+    public int invMax = 9;
     public bool pauseValue = false;
     public int inventorySelect = 0;
     public static GameManager instance;
-
     public GameObject selectedObject = null;
-
     //list to record inventory
     public List<Item> InventoryList = new List<Item>();
     //lits for all possible items
     public List<Item> theItems = new List<Item>();
-
     //int to store where the the player came from
     public int doorFrom = -1;
-
     //handles room connections
     public int[,] roomGridArray = {
         {2,6,0,5},
@@ -29,17 +27,6 @@ public class GameManager : MonoBehaviour
         {0,0,0,1},
         {0,0,0,1}
     };
-
-    //parallel array for locked doors (North, East, South, West)
-    public bool[,] lockedDoorArray = {
-        {true, false, false, true},
-        {false, false, false, false},
-        {false, false, false, false},
-        {false, false, false, false},
-        {false, false, false, false},
-        {false, false, false, false}
-    };
-
     //array for destination names
     public string[,] roomNameArray = {
         {"Foyer", "Graveyard", "", "Basement"},
@@ -59,17 +46,15 @@ public class GameManager : MonoBehaviour
         {1,0,0,0,0,0},
         {1,0,0,0,0,0}
     };
-
     //bool array to store if item has been interacted with yet
     public bool [][] interactableArray = new bool[][] {
-        new bool [1] {false}, //room1: car door
+        new bool [3] {false, false, false}, //room1: car door, basement door, foyer door
         new bool [0] {}, //room2: nothing
         new bool [1] {false}, //room3: kitchen freezer door
         new bool [1] {false}, //room4: fireplace interaction spot
         new bool [0] {}, //room5: nothing?
         new bool [0] {}  //room6: nothing
     };
-
     //array for puzzle items needed for each room? currently making obsolete
     public string [][] roomNeedsArray = new string[][]
     {

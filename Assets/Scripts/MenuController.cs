@@ -13,6 +13,12 @@ public class MenuController : MonoBehaviour
         Debug.Log("All values reset!");
         SceneManager.LoadScene("Room#1");
     }
+
+    public void Menu() {
+        ResetValues();
+        Debug.Log("Moving to start scene");
+        SceneManager.LoadScene("StartScene");
+    }
     
     public void Exit() {
         Application.Quit();
@@ -32,18 +38,12 @@ public class MenuController : MonoBehaviour
         //just for safety, unpauses the game when restarting
         GM.pauseValue = false;
 
-        //resets the locked door array by unlocking all doors then locking the ones that are supposed to be unlocked
-        for (int x = 0; x < 6; ++x) {
-            for (int y = 0; y < 4; ++y) {
-                GM.lockedDoorArray[x,y] = false;
-            }
-        }
-        GM.lockedDoorArray[0,0] = true;
-        GM.lockedDoorArray[0,3] = true;
-
         //resets interactables
-        GM.interactableArray[2][0] = false;
         GM.interactableArray[0][0] = false;
+        GM.interactableArray[0][1] = false;
+        GM.interactableArray[0][2] = false;
+        GM.interactableArray[2][0] = false;
+        
 
         //resets the doorfron munber to prevent errors of the player spawning
         GM.doorFrom = -1;

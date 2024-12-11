@@ -9,7 +9,7 @@ using TMPro;
 public class RoomController : MonoBehaviour
 {
     public static GameObject freezerDoorOpened;
-    public static GameObject carOpened;
+    public static GameObject disObj1, disObj2, disObj3;
     public static GameObject frontDoorKey;
     public GameObject player;
     private void Start() {
@@ -46,10 +46,22 @@ public class RoomController : MonoBehaviour
                     GameObject.Find("Car").SetActive(false);
                 }
                 else {
-                    carOpened = GameObject.Find("CarOpened");
-                    carOpened.SetActive(false);
-                    //frontDoorKey = GameObject.Find("FrontDoorKey");
-                    //frontDoorKey.SetActive(false);
+                    disObj1 = GameObject.Find("CarOpened");
+                    disObj1.SetActive(false);
+                }
+                if (GameManager.instance.interactableArray[0][1] == true) {
+                    GameObject.Find("Basement Door").SetActive(false);
+                }
+                else {
+                    disObj2 = GameObject.Find("WestDoor");
+                    disObj2.SetActive(false);
+                }
+                if (GameManager.instance.interactableArray[0][2] == true) {
+                    GameObject.Find("Foyer Door").SetActive(false);
+                }
+                else {
+                    disObj3 = GameObject.Find("NorthDoor");
+                    disObj3.SetActive(false);
                 }
                 Debug.Log("Room#1 INIT Completed!");
                 break;
@@ -60,12 +72,12 @@ public class RoomController : MonoBehaviour
                 //need to remove door and replace with opened door
                 if (GameManager.instance.interactableArray[2][0] == true) {
                     //deletes locked door, leaving the opened door
-                    GameObject.Find("FreezerDoorLocked").SetActive(false);
+                    GameObject.Find("Freezer").SetActive(false);
                 }
                 else {
                     //deletes opened door, leaving locked door
-                    freezerDoorOpened = GameObject.Find("FreezerDoorOpened");
-                    freezerDoorOpened.SetActive(false);
+                    disObj1 = GameObject.Find("FreezerDoorOpened");
+                    disObj1.SetActive(false);
                 }
                 Debug.Log("Room#3 INIT Completed!");
                 break;
@@ -193,10 +205,10 @@ public class RoomController : MonoBehaviour
         GameObject imgObj;
         //if i was decreased below 0, wrap around to 5
         if (i < 0) {
-            GameManager.instance.inventorySelect = 5;
+            GameManager.instance.inventorySelect = GameManager.instance.invMax - 1;
         }
-        //if i was increased above 5, wrap around to 0
-        else if (i >= 6) {
+        //if i was increased above 8, wrap around to 0
+        else if (i >= GameManager.instance.invMax) {
             GameManager.instance.inventorySelect = 0;
         }
         //if above 0 but below 6, it is valid and can be used as a value
@@ -204,7 +216,7 @@ public class RoomController : MonoBehaviour
             GameManager.instance.inventorySelect = i;
         }
         //changes image color to default for all
-        for (int x = 1; x < 7; ++x) {
+        for (int x = 1; x < GameManager.instance.invMax + 1; ++x) {
             imgName = "Image" + x.ToString();
             imgObj = GameObject.Find(imgName);
             imgObj.GetComponent<Image>().color = new Color32(255, 255, 255, 255);

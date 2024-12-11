@@ -50,6 +50,15 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha6)) {
                 RoomController.UpdateInventorySelect(5);
             }
+            if (Input.GetKeyDown(KeyCode.Alpha7)) {
+                RoomController.UpdateInventorySelect(6);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                RoomController.UpdateInventorySelect(7);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha9)) {
+                RoomController.UpdateInventorySelect(8);
+            }
             if (Input.GetAxis("Mouse ScrollWheel") > 0f) {
                 RoomController.UpdateInventorySelect(--GameManager.instance.inventorySelect);
             }
